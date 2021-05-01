@@ -1,8 +1,5 @@
-from aiogram import Bot, Dispatcher, types, executor
+from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters import Text
-from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.utils.executor import start_webhook
 
 import config
@@ -49,8 +46,7 @@ async def show_laptops(call: types.CallbackQuery):
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
-    '''
+    #executor.start_polling(dp, skip_updates=True)
     start_webhook(
         dispatcher=dp,
         webhook_path=config.WEBHOOK_PATH,
@@ -58,4 +54,4 @@ if __name__ == '__main__':
         on_startup=on_startup,
         host=config.WEBAPP_HOST,
         port=config.WEBAPP_PORT
-    )'''
+    )
