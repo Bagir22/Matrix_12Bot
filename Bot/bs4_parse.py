@@ -33,7 +33,7 @@ def get_first_level_categories(text):
     return first_level_categories_list
 
 
-first_level_categories_list = get_first_level_categories(text)
+categories = get_first_level_categories(text)
 
 
 site = 'https://matrix12.ru/goods/notebook/notebook/'
@@ -54,3 +54,4 @@ def get_item(site):
 
 
 items = get_item(site)
+
