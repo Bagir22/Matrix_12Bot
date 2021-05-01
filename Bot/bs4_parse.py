@@ -3,11 +3,13 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import re
 
+
 url = 'https://matrix12.ru/'
 
 
 second_level_categories_list = []
 third_level_categories_list = []
+
 
 def get_text(url):
     r = requests.get(url)
@@ -37,6 +39,7 @@ first_level_categories_list = get_first_level_categories(text)
 site = 'https://matrix12.ru/goods/notebook/notebook/'
 for_img = 'https://matrix12.ru'
 
+
 def get_item(site):
     items = []
     soup = BeautifulSoup(urlopen(site), "html.parser")
@@ -48,5 +51,6 @@ def get_item(site):
         item = {'name': re.sub(' +', ' ', re.sub('\n', ' ', name.text)), 'price': re.sub(' +', ' ',  re.sub('\n', ' ', price.text)), 'img': for_img + img['src']}
         items.append(item)
     return items
+
 
 items = get_item(site)

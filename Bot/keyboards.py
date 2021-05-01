@@ -1,5 +1,4 @@
 from aiogram import types
-import bs4_parse
 
 
 def main_keyboard():
