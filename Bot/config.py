@@ -8,7 +8,7 @@ bot_token = '1776652361:AAEJWQC4X-NY8SXn2vDACsaAcKouJ7WkeG0'
 
 HEROKU_APP_NAME = 'matrix12bot'
 
-# webhook settings
+# webhook settings1
 WEBHOOK_HOST = f'https://{HEROKU_APP_NAME}.herokuapp.com'
 WEBHOOK_PATH = f'/webhook/{bot_token}'
 WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
