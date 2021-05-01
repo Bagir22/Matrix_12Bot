@@ -6,7 +6,7 @@ bot_token = '1776652361:AAEJWQC4X-NY8SXn2vDACsaAcKouJ7WkeG0'
 
 #MONGODB_URI = 'mongodb+srv://WeatherBot:vCVaDVvEqRf6zZs@cluster0.xicxe.mongodb.net/WeatherBotDB?retryWrites=true&w=majority'
 
-HEROKU_APP_NAME = 'bagirtelegramweatherbot'
+HEROKU_APP_NAME = 'matrix12bot'
 
 # webhook settings
 WEBHOOK_HOST = f'https://{HEROKU_APP_NAME}.herokuapp.com'
