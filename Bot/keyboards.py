@@ -7,8 +7,7 @@ from bs4_parse import categories
 def main_keyboard():
     keyboard = types.InlineKeyboardMarkup()
     keyboard_catalog = types.InlineKeyboardButton(text="Каталог", callback_data="catalog_button")
-    keyboard_back = types.InlineKeyboardButton(text="Назад", callback_data="main_back_button")
-    keyboard.add(keyboard_catalog, keyboard_back)
+    keyboard.add(keyboard_catalog)
 
     return keyboard
 
@@ -24,7 +23,7 @@ def first_categories_keyboard(*args):
 
 def laptos_and_accessories_keyboard():
     keyboard = types.InlineKeyboardMarkup()
-    keyboard_laptops_btn = types.InlineKeyboardButton(text="Ноутбуки", callback_data="laptops_button")
+    keyboard_laptops_btn = types.InlineKeyboardButton(text="Ноутбуки", callback_data="items_button")
     keyboard_laptop_batteries_btn = types.InlineKeyboardButton(text="Аккумуляторы к ноутбукам", callback_data="laptop_batteries_button")
     keyboard_power_supplies_orig_btn = types.InlineKeyboardButton(text="Блоки питания к ноутбукам оригинальные", callback_data="power_supplies_orig_button")
     keyboard_power_supplies_univ_btn = types.InlineKeyboardButton(text="Блоки питания к ноутбукам универсальные", callback_data="power_supplies_univ_button")

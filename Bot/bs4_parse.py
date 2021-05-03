@@ -40,7 +40,7 @@ site = 'https://matrix12.ru/goods/notebook/notebook/'
 for_img = 'https://matrix12.ru'
 
 
-def get_item(site):
+def get_items(site):
     items = []
     soup = BeautifulSoup(urlopen(site), "html.parser")
     li = soup.find_all('li', {'class': 'catalog_wrap_item_a'})
@@ -48,10 +48,12 @@ def get_item(site):
         name = l.find('div', {'class': "catalog_item_info"})
         price = l.find('span', {'class': "editor-pane-num"})
         img = l.find('img')
-        item = {'name': re.sub(' +', ' ', re.sub('\n', ' ', name.text)), 'price': re.sub(' +', ' ',  re.sub('\n', ' ', price.text)), 'img': for_img + img['src']}
+        item = {'name': re.sub(' +', ' ', re.sub('\n', ' ', name.text)),
+                'price': re.sub(' +', ' ',  re.sub('\n', ' ', price.text.replace("*", ""))),
+                'img': for_img + img['src']}
         items.append(item)
     return items
 
 
-items = get_item(site)
+items = get_items(site)
 
