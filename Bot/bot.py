@@ -8,13 +8,14 @@ import config
 import keyboards
 import bs4_parse
 
+import re
 
 bot = Bot(token=config.bot_token)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
 i = None
-
+global fl_category
 
 async def on_startup(dp):
     await bot.set_webhook(config.WEBHOOK_URL, drop_pending_updates=True)
@@ -31,16 +32,29 @@ async def catalog_command(call: types.CallbackQuery):
 
 
 @dp.callback_query_handler(text='catalog_button')
-async def set_catalog_keyboard(call: types.CallbackQuery):
-    await call.message.edit_reply_markup(reply_markup=keyboards.first_categories_keyboard())
+async def set_fl_catalog_keyboard(call: types.CallbackQuery):
+    fl_categories = bs4_parse.get_first_level_categories()
+    await call.message.edit_reply_markup(reply_markup=keyboards.first_categories_keyboard(fl_categories))
 
 
-@dp.callback_query_handler(text='1_fc_btn')
-async def set_laptops_and_accessories_keyboard(call: types.CallbackQuery):
-    await call.message.edit_reply_markup(reply_markup=keyboards.laptos_and_accessories_keyboard())
+@dp.callback_query_handler(text_contains='_fc_btn')
+async def set_sl_catalog_keyboard(call: types.CallbackQuery):
+    fl_category_index = re.findall(r'[0-9]+', call.data)
+    fl_categories = bs4_parse.get_first_level_categories()
+    global fl_category
+    fl_category = fl_categories[int(fl_category_index[0])]
+    sl_categories = bs4_parse.get_second_level_categories(fl_category)
+    await call.message.edit_reply_markup(reply_markup=keyboards.second_categories_keyboard(sl_categories))
 
 
-
+@dp.callback_query_handler(text_contains='_sc_btn')
+async def set_tl_catalog_keyboard(call: types.CallbackQuery):
+    sl_category_index = re.findall(r'[0-9]+', call.data)
+    global fl_category
+    sl_categories = bs4_parse.get_second_level_categories(fl_category)
+    sl_category = sl_categories[int(sl_category_index[0])]
+    tl_categories = bs4_parse.get_third_level_categories(sl_category)
+    await call.message.edit_reply_markup(reply_markup=keyboards.third_categories_keyboard(tl_categories))
 
 
 @dp.callback_query_handler(text='items_button')
@@ -76,8 +90,8 @@ async def items_button(call: types.CallbackQuery):
 
 
 if __name__ == '__main__':
-    #executor.start_polling(dp, skip_updates=True)
-
+    executor.start_polling(dp, skip_updates=True)
+    '''
     start_webhook(
         dispatcher=dp,
         webhook_path=config.WEBHOOK_PATH,
@@ -86,3 +100,4 @@ if __name__ == '__main__':
         host=config.WEBAPP_HOST,
         port=config.WEBAPP_PORT
     )
+    '''
