@@ -45,7 +45,6 @@ async def set_sl_catalog_keyboard(call: types.CallbackQuery):
     fl_categories = bs4_parse.get_first_level_categories()
     fl_category = fl_categories[int(fl_category_index[0])]
     sl_categories = bs4_parse.get_second_level_categories(fl_category)
-    print(fl_category)
     if not sl_categories:
         items = bs4_parse.get_items(category=fl_category)
         i = 0
@@ -71,6 +70,7 @@ async def set_tl_catalog_keyboard(call: types.CallbackQuery):
                                         reply_markup=keyboards.item_keyboard())
     else:
         await call.message.edit_reply_markup(reply_markup=keyboards.third_categories_keyboard(tl_categories))
+
 
 @dp.callback_query_handler(text_contains='_tc_btn')
 async def items_button(call: types.CallbackQuery):
@@ -105,8 +105,7 @@ async def items_button(call: types.CallbackQuery):
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
-    '''
+    #executor.start_polling(dp, skip_updates=True)
     start_webhook(
         dispatcher=dp,
         webhook_path=config.WEBHOOK_PATH,
@@ -115,4 +114,4 @@ if __name__ == '__main__':
         host=config.WEBAPP_HOST,
         port=config.WEBAPP_PORT
     )
-    '''
+

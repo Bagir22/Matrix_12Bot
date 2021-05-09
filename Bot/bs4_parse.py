@@ -95,6 +95,6 @@ def get_items(category):
         item = {'name': re.sub(' +', ' ', re.sub('\n', ' ', name.text)),
                 'price': re.sub(' +', ' ', re.sub('\n', ' ', price.text.replace("*", ""))), 'img': site + img['src']}
         items.append(item)
-    print(items)
+
     return items
 
