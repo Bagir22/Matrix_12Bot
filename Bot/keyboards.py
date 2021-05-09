@@ -1,7 +1,4 @@
 from aiogram import types
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from aiogram.utils.parts import paginate
-
 
 
 def main_keyboard():
@@ -19,6 +16,7 @@ def first_categories_keyboard(fl_categories):
             types.InlineKeyboardButton(text=f'{fl_category["text"]}', callback_data=f"{fl_categories.index(fl_category)}_fc_btn"))
     keyboard_back = types.InlineKeyboardButton(text="Назад", callback_data="back_button")
     keyboard.add(keyboard_back)
+
     return keyboard
 
 
@@ -29,6 +27,7 @@ def second_categories_keyboard(sl_categories):
             types.InlineKeyboardButton(text=f'{sl_category["text"]}', callback_data=f"{sl_categories.index(sl_category)}_sc_btn"))
     keyboard_back = types.InlineKeyboardButton(text="Назад", callback_data="back_button")
     keyboard.add(keyboard_back)
+
     return keyboard
 
 
@@ -39,6 +38,7 @@ def third_categories_keyboard(tl_categories):
             types.InlineKeyboardButton(text=f'{tl_category["text"]}', callback_data=f'{tl_categories.index(tl_category)}_tc_btn'))
     keyboard_back = types.InlineKeyboardButton(text="Назад", callback_data="back_button")
     keyboard.add(keyboard_back)
+
     return keyboard
 
 
@@ -49,5 +49,6 @@ def item_keyboard():
     keyboard_back = types.InlineKeyboardButton(text="Назад", callback_data="back_button")
     keyboard.add(keyboard_previous, keyboard_next)
     keyboard.row(keyboard_back)
+
     return keyboard
 

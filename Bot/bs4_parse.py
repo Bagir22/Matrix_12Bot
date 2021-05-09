@@ -1,9 +1,8 @@
 import requests
-import lxml
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import re
-import sys
+
 
 url = 'https://matrix12.ru/'
 
@@ -74,11 +73,6 @@ def get_third_level_categories(sl_category):
                                           'link': tl_category['href']})
 
     return tl_categories
-
-
-
-site = 'https://matrix12.ru'
-for_img = 'https://matrix12.ru'
 
 
 def get_items(category):
