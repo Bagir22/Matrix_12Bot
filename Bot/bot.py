@@ -109,8 +109,7 @@ async def next_button(call: types.CallbackQuery):
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=True)
-    '''
+    #executor.start_polling(dp, skip_updates=True)
     start_webhook(
         dispatcher=dp,
         webhook_path=config.WEBHOOK_PATH,
@@ -119,7 +118,7 @@ if __name__ == '__main__':
         host=config.WEBAPP_HOST,
         port=config.WEBAPP_PORT
     )
-    '''
+
 
 
 
