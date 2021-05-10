@@ -4,7 +4,7 @@ import os
 bot_token = os.environ.get('bot_token')
 
 
-MONGODB_URI = os.environ.get('MONGODB_URI')
+MONGODB_URI = 'mongodb+srv://WeatherBot:vCVaDVvEqRf6zZs@cluster0.xicxe.mongodb.net/Matrix_12BotDB?retryWrites=true&w=majority'
 
 
 HEROKU_APP_NAME = 'matrix12bot'
