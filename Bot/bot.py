@@ -29,6 +29,7 @@ async def catalog_command(message: types.Message):
 
 @dp.callback_query_handler(text='back_button')
 async def catalog_command(call: types.CallbackQuery):
+    await call.message.delete()
     await call.message.answer(text='Каталог:', reply_markup=keyboards.main_keyboard())
 
 

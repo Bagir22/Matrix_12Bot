@@ -81,14 +81,25 @@ def get_items(category):
     link = category['link']
     url = site + link
     soup = BeautifulSoup(urlopen(url), "html.parser")
-    li = soup.find_all('li', {'class': 'catalog_wrap_item_a'})
-    for l in li:
-        name = l.find('div', {'class': "catalog_item_info"})
-        price = l.find('span', {'class': "editor-pane-num"})
-        img = l.find('img')
+    item_layers = soup.find_all('div', {'class': 'catalog_item_layer'})
+    for item_layer in item_layers:
+        name = item_layer.find('div', {'class': "catalog_item_info"})
+        price = item_layer.find('span', {'class': "editor-pane-num"})
+        href = item_layer.find('a', href=True)
+        item_page_url = site + href['href']
+        item_page = BeautifulSoup(urlopen(item_page_url), "html.parser")
+        img_form = item_page.find('div', {'id': 'fotorama-gallery'})
+        if not img_form:
+            img = item_layer.find('img')
+        else:
+            img = img_form.find('img')
         item = {'name': re.sub(' +', ' ', re.sub('\n', ' ', name.text)),
-                'price': re.sub(' +', ' ', re.sub('\n', ' ', price.text.replace("*", ""))), 'img': site + img['src']}
+                'price': re.sub(' +', ' ', re.sub('\n', ' ', price.text.replace("*", ""))),
+                'img': site + img['src']}
         items.append(item)
 
     return items
+
+
+
 
