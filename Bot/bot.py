@@ -21,6 +21,7 @@ async def on_startup(dp):
     await bot.set_webhook(config.WEBHOOK_URL, drop_pending_updates=True)
 
 
+@dp.message_handler(commands=['start'])
 @dp.message_handler(commands=['catalog'])
 async def catalog_command(message: types.Message):
     mongodb.insert_data_into_db(id=message.chat.id)
@@ -50,9 +51,11 @@ async def set_sl_catalog_keyboard(call: types.CallbackQuery):
     if not sl_categories:
         items = bs4_parse.get_items(category=fl_category)
         i = 0
-        mongodb.update_items(id, items, i)
+        mongodb.update_items(id, items, i, category=fl_category['text'])
         await call.message.answer_photo(photo=items[i]['img'],
-                                        caption=items[i]['name'] + '\n' + "Цена: " + items[i]['price'],
+                                        caption=f"Категория: {fl_category['text']}\n"
+                                                f"{items[i]['name']}\n "
+                                                f"Цена: {items[i]['price']}",
                                         reply_markup=keyboards.item_keyboard())
     else:
         await call.message.edit_reply_markup(reply_markup=keyboards.second_categories_keyboard(sl_categories))
@@ -69,9 +72,11 @@ async def set_tl_catalog_keyboard(call: types.CallbackQuery):
     if not tl_categories:
         items = bs4_parse.get_items(category=sl_category)
         i = 0
-        mongodb.update_items(id, items, i)
+        mongodb.update_items(id, items, i, category=sl_category['text'])
         await call.message.answer_photo(photo=items[i]['img'],
-                                        caption=items[i]['name'] + '\n' + "Цена: " + items[i]['price'],
+                                        caption=f"Категория: {sl_category['text']}\n"
+                                                f"{items[i]['name']}\n "
+                                                f"Цена: {items[i]['price']}",
                                         reply_markup=keyboards.item_keyboard())
     else:
         await call.message.edit_reply_markup(reply_markup=keyboards.third_categories_keyboard(tl_categories))
@@ -85,9 +90,11 @@ async def items_button(call: types.CallbackQuery):
     tl_category = tl_categories[int(tl_category_index[0])]
     items = bs4_parse.get_items(category=tl_category)
     i = 0
-    mongodb.update_items(id, items, i)
+    mongodb.update_items(id, items, i, category=tl_category['text'])
     await call.message.answer_photo(photo=items[i]['img'],
-                                    caption=items[i]['name'] + '\n' + "Цена: " + items[i]['price'],
+                                    caption=f"Категория: {tl_category['text']}\n"
+                                            f"{items[i]['name']}\n "
+                                            f"Цена: {items[i]['price']}",
                                     reply_markup=keyboards.item_keyboard())
 
 
@@ -95,21 +102,24 @@ async def items_button(call: types.CallbackQuery):
 @dp.callback_query_handler(text='previous_button')
 async def next_button(call: types.CallbackQuery):
     id = call.message.chat.id
-    items, i = mongodb.get_items(id)
+    items, i, category = mongodb.get_items(id)
     if call.data == 'next_button':
         i += 1
     else:
         i -= 1
 
-    mongodb.update_items(id, items, i)
+    mongodb.update_items(id, items, i, category)
     await call.message.delete()
     await call.message.answer_photo(photo=items[i]['img'],
-                                    caption=items[i]['name'] + '\n' + "Цена: " + items[i]['price'],
+                                    caption=f"Категория: {category}\n"
+                                            f"{items[i]['name']}\n "
+                                            f"Цена: {items[i]['price']}",
                                     reply_markup=keyboards.item_keyboard())
 
 
 if __name__ == '__main__':
-    #executor.start_polling(dp, skip_updates=True)
+    executor.start_polling(dp, skip_updates=True)
+    '''
     start_webhook(
         dispatcher=dp,
         webhook_path=config.WEBHOOK_PATH,
@@ -118,6 +128,8 @@ if __name__ == '__main__':
         host=config.WEBAPP_HOST,
         port=config.WEBAPP_PORT
     )
+    '''
+
 
 
 

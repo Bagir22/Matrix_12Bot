@@ -51,13 +51,14 @@ def get_tls(id):
     return tls
 
 
-def update_items(id, items=None, i=None):
+def update_items(id, items=None, i=None, category = None):
     collection.update_one(
-        {"_id": id}, {"$set": {"items": items, "i": i}})
+        {"_id": id}, {"$set": {"items": items, "i": i, "category": category}})
 
 
 def get_items(id):
     items = collection.find_one({"_id": id})["items"]
     i = collection.find_one({"_id": id})["i"]
+    category = collection.find_one({"_id": id})["category"]
 
-    return items, i
+    return items, i, category
