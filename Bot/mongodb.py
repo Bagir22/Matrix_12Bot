@@ -14,11 +14,12 @@ items = None
 def insert_data_into_db(id, fl_category=None, sl_category=None,
                         fl_categories=None, sl_categories=None,
                         tl_categories=None, i = None, items=None,
-                        category=None, categories=None):
+                        category=None, categories=None,
+                        kb_index=None):
     collection.update({"id": id}, {"$set": {"fl_category": None, "sl_category": None,
                                             "fl_categories": None, "sl_categories": None,
                                             "tl_categories": None, "items": None,
-                                            "i": None,
+                                            "i": None, "kb_index": None,
                                             "category": category,
                                             "categories": categories
                                             }}, upsert=True)
@@ -63,6 +64,12 @@ def update_i(id, i):
         {"_id": id}, {"$set": {"i": i}})
 
 
+def update_keyboard_index(id, kb_index):
+    collection.update_one(
+        {"_id": id}, {"$set": {"kb_index": kb_index}})
+
+
+
 def get_items(id):
     items = collection.find_one({"_id": id})["items"]
     i = collection.find_one({"_id": id})["i"]
@@ -72,9 +79,9 @@ def get_items(id):
 
 
 def get_categories(id):
-    category = collection.find_one({"_id": id})["category"]
     fl_categories = collection.find_one({"_id": id})["fl_categories"]
     sl_categories = collection.find_one({"_id": id})["sl_categories"]
     tl_categories = collection.find_one({"_id": id})["tl_categories"]
+    kb_index = collection.find_one({"_id": id})["kb_index"]
 
-    return category, fl_categories, sl_categories, tl_categories
+    return fl_categories, sl_categories, tl_categories, kb_index

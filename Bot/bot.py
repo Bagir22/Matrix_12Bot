@@ -32,18 +32,28 @@ async def catalog_command(message: types.Message):
 async def catalog_command(call: types.CallbackQuery):
     await call.message.delete()
     id = call.message.chat.id
-    category, fl_categories, sl_categories, tl_categories = mongodb.get_categories(id)
-    if category in fl_categories:
-        await call.message.answer(text='Каталог:', reply_markup=keyboards.first_categories_keyboard(fl_categories))
-    if category in sl_categories:
-        await call.message.answer(text='Каталог:', reply_markup=keyboards.second_categories_keyboard(sl_categories))
-    if category in tl_categories:
-        await call.message.answer(text='Каталог:', reply_markup=keyboards.third_categories_keyboard(tl_categories))
+    fl_categories, sl_categories, tl_categories, kb_index = mongodb.get_categories(id)
+    if kb_index == 1:
+        await call.message.answer(text='Каталог:',
+                                  reply_markup=keyboards.first_categories_keyboard(fl_categories))
+    if kb_index == 2:
+        await call.message.answer(text='Каталог:',
+                                  reply_markup=keyboards.second_categories_keyboard(sl_categories))
+        kb_index -= 1
+        mongodb.update_keyboard_index(id, kb_index)
+    if kb_index == 3:
+        await call.message.answer(text='Каталог:',
+                                  reply_markup=keyboards.third_categories_keyboard(tl_categories))
+        kb_index -=1
+        mongodb.update_keyboard_index(id, kb_index)
+
 
 
 @dp.callback_query_handler(text='catalog_button')
 async def set_fl_catalog_keyboard(call: types.CallbackQuery):
+    id = call.message.chat.id
     fl_categories = bs4_parse.get_first_level_categories()
+    mongodb.update_keyboard_index(id, kb_index=1)
     await call.message.edit_reply_markup(reply_markup=keyboards.first_categories_keyboard(fl_categories))
 
 
@@ -67,6 +77,7 @@ async def set_sl_catalog_keyboard(call: types.CallbackQuery):
                                                 f"Цена: {items[i]['price']}",
                                         reply_markup=keyboards.item_keyboard(items))
     else:
+        mongodb.update_keyboard_index(id, kb_index=2)
         await call.message.edit_reply_markup(reply_markup=keyboards.second_categories_keyboard(sl_categories))
 
 
@@ -90,6 +101,7 @@ async def set_tl_catalog_keyboard(call: types.CallbackQuery):
                                                 f"Цена: {items[i]['price']}",
                                         reply_markup=keyboards.item_keyboard(items))
     else:
+        mongodb.update_keyboard_index(id, kb_index=3)
         await call.message.edit_reply_markup(reply_markup=keyboards.third_categories_keyboard(tl_categories))
 
 
@@ -139,6 +151,8 @@ if __name__ == '__main__':
         host=config.WEBAPP_HOST,
         port=config.WEBAPP_PORT
     )
+
+
 
 
 
