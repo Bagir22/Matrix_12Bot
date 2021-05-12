@@ -49,6 +49,8 @@ async def set_sl_catalog_keyboard(call: types.CallbackQuery):
     sl_categories = bs4_parse.get_second_level_categories(fl_category)
     mongodb.insert_fl_categories(id, fl_categories, fl_category, sl_categories)
     if not sl_categories:
+        await call.message.delete()
+        await call.message.answer(text="Идет поиск товаров")
         items = bs4_parse.get_items(category=fl_category)
         i = 0
         mongodb.update_items(id, items, i, category=fl_category['text'])
@@ -70,6 +72,8 @@ async def set_tl_catalog_keyboard(call: types.CallbackQuery):
     tl_categories = bs4_parse.get_third_level_categories(sl_category)
     mongodb.insert_tl_categories(id, sl_category, tl_categories)
     if not tl_categories:
+        await call.message.delete()
+        await call.message.answer(text="Идет поиск товаров")
         items = bs4_parse.get_items(category=sl_category)
         i = 0
         mongodb.update_items(id, items, i, category=sl_category['text'])
@@ -88,6 +92,8 @@ async def items_button(call: types.CallbackQuery):
     tl_categories = mongodb.get_tls(id)
     tl_category_index = re.findall(r'[0-9]+', call.data)
     tl_category = tl_categories[int(tl_category_index[0])]
+    await call.message.delete()
+    await call.message.answer(text="Идет поиск товаров")
     items = bs4_parse.get_items(category=tl_category)
     i = 0
     mongodb.update_items(id, items, i, category=tl_category['text'])
@@ -107,9 +113,8 @@ async def next_button(call: types.CallbackQuery):
         i += 1
     else:
         i -= 1
-
-    mongodb.update_items(id, items, i, category)
     await call.message.delete()
+    mongodb.update_items(id, items, i, category)
     await call.message.answer_photo(photo=items[i]['img'],
                                     caption=f"Категория: {category}\n"
                                             f"{items[i]['name']}\n "
@@ -118,7 +123,8 @@ async def next_button(call: types.CallbackQuery):
 
 
 if __name__ == '__main__':
-    #executor.start_polling(dp, skip_updates=True)
+    executor.start_polling(dp, skip_updates=True)
+    '''
     start_webhook(
         dispatcher=dp,
         webhook_path=config.WEBHOOK_PATH,
@@ -127,6 +133,8 @@ if __name__ == '__main__':
         host=config.WEBAPP_HOST,
         port=config.WEBAPP_PORT
     )
+    '''
+
 
 
 

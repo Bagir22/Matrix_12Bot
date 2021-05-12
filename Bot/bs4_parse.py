@@ -85,14 +85,7 @@ def get_items(category):
     for item_layer in item_layers:
         name = item_layer.find('div', {'class': "catalog_item_info"})
         price = item_layer.find('span', {'class': "editor-pane-num"})
-        href = item_layer.find('a', href=True)
-        item_page_url = site + href['href']
-        item_page = BeautifulSoup(urlopen(item_page_url), "html.parser")
-        img_form = item_page.find('div', {'id': 'fotorama-gallery'})
-        if not img_form:
-            img = item_layer.find('img')
-        else:
-            img = img_form.find('img')
+        img = item_layer.find('img')
         item = {'name': re.sub(' +', ' ', re.sub('\n', ' ', name.text)),
                 'price': re.sub(' +', ' ', re.sub('\n', ' ', price.text.replace("*", ""))),
                 'img': site + img['src']}
