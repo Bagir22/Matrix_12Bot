@@ -113,6 +113,10 @@ async def next_button(call: types.CallbackQuery):
         i += 1
     else:
         i -= 1
+    if i > len(items):
+        i = 0
+    if i < len(items):
+        i = 0
     await call.message.delete()
     await call.message.answer_photo(photo=items[i]['img'],
                                     caption=f"Категория: {category}\n"
