@@ -42,6 +42,7 @@ def get_second_level_categories(fl_category):
             if check.text == fl_category['text']:
                 if category.findAll('li', {'class': 'subpages'}):
                     sl_categories_li = category.findAll('li', {'class': 'subpages'})
+                    sl_categories_li += category.findAll('li')
                     for sl_categories_a in sl_categories_li:
                         if not sl_categories_a.findParent('table'):
                             sl_category_a = sl_categories_a.findAll('a', href=True)
