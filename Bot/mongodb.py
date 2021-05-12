@@ -53,7 +53,14 @@ def get_tls(id):
 
 def update_items(id, items=None, i=None, category = None):
     collection.update_one(
-        {"_id": id}, {"$set": {"items": items, "i": i, "category": category}})
+        {"_id": id}, {"$set": {"items": items,
+                               "i": i,
+                               "category": category}})
+
+
+def update_i(id, i):
+    collection.update_one(
+        {"_id": id}, {"$set": {"i": i}})
 
 
 def get_items(id):

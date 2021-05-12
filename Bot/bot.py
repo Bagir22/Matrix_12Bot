@@ -114,13 +114,12 @@ async def next_button(call: types.CallbackQuery):
     else:
         i -= 1
     await call.message.delete()
-    mongodb.update_items(id, items, i, category)
     await call.message.answer_photo(photo=items[i]['img'],
                                     caption=f"Категория: {category}\n"
                                             f"{items[i]['name']}\n "
                                             f"Цена: {items[i]['price']}",
                                     reply_markup=keyboards.item_keyboard(items))
-
+    mongodb.update_i(id, i)
 
 if __name__ == '__main__':
     #executor.start_polling(dp, skip_updates=True)
