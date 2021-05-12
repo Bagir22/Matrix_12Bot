@@ -31,7 +31,14 @@ async def catalog_command(message: types.Message):
 @dp.callback_query_handler(text='back_button')
 async def catalog_command(call: types.CallbackQuery):
     await call.message.delete()
-    await call.message.answer(text='Каталог:', reply_markup=keyboards.main_keyboard())
+    id = call.message.chat.id
+    category, fl_categories, sl_categories, tl_categories = mongodb.get_categories(id)
+    if category in fl_categories:
+        await call.message.answer(text='Каталог:', reply_markup=keyboards.first_categories_keyboard(fl_categories))
+    if category in sl_categories:
+        await call.message.answer(text='Каталог:', reply_markup=keyboards.second_categories_keyboard(sl_categories))
+    if category in tl_categories:
+        await call.message.answer(text='Каталог:', reply_markup=keyboards.third_categories_keyboard(tl_categories))
 
 
 @dp.callback_query_handler(text='catalog_button')

@@ -69,3 +69,12 @@ def get_items(id):
     category = collection.find_one({"_id": id})["category"]
 
     return items, i, category
+
+
+def get_categories(id):
+    category = collection.find_one({"_id": id})["category"]
+    fl_categories = collection.find_one({"_id": id})["fl_categories"]
+    sl_categories = collection.find_one({"_id": id})["sl_categories"]
+    tl_categories = collection.find_one({"_id": id})["tl_categories"]
+
+    return category, fl_categories, sl_categories, tl_categories
