@@ -58,7 +58,7 @@ async def set_sl_catalog_keyboard(call: types.CallbackQuery):
                                         caption=f"Категория: {fl_category['text']}\n"
                                                 f"{items[i]['name']}\n "
                                                 f"Цена: {items[i]['price']}",
-                                        reply_markup=keyboards.item_keyboard())
+                                        reply_markup=keyboards.item_keyboard(items))
     else:
         await call.message.edit_reply_markup(reply_markup=keyboards.second_categories_keyboard(sl_categories))
 
@@ -81,7 +81,7 @@ async def set_tl_catalog_keyboard(call: types.CallbackQuery):
                                         caption=f"Категория: {sl_category['text']}\n"
                                                 f"{items[i]['name']}\n "
                                                 f"Цена: {items[i]['price']}",
-                                        reply_markup=keyboards.item_keyboard())
+                                        reply_markup=keyboards.item_keyboard(items))
     else:
         await call.message.edit_reply_markup(reply_markup=keyboards.third_categories_keyboard(tl_categories))
 
@@ -101,7 +101,7 @@ async def items_button(call: types.CallbackQuery):
                                     caption=f"Категория: {tl_category['text']}\n"
                                             f"{items[i]['name']}\n "
                                             f"Цена: {items[i]['price']}",
-                                    reply_markup=keyboards.item_keyboard())
+                                    reply_markup=keyboards.item_keyboard(items))
 
 
 @dp.callback_query_handler(text='next_button')
@@ -119,7 +119,7 @@ async def next_button(call: types.CallbackQuery):
                                     caption=f"Категория: {category}\n"
                                             f"{items[i]['name']}\n "
                                             f"Цена: {items[i]['price']}",
-                                    reply_markup=keyboards.item_keyboard())
+                                    reply_markup=keyboards.item_keyboard(items))
 
 
 if __name__ == '__main__':
