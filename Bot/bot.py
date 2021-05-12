@@ -96,13 +96,12 @@ async def items_button(call: types.CallbackQuery):
     items = bs4_parse.get_items(category=tl_category)
     await call.message.delete()
     i = 0
-    mongodb.update_items(id, items, i, category=tl_category['text'])
     await call.message.answer_photo(photo=items[i]['img'],
                                     caption=f"Категория: {tl_category['text']}\n"
                                             f"{items[i]['name']}\n "
                                             f"Цена: {items[i]['price']}",
                                     reply_markup=keyboards.item_keyboard(items))
-
+    mongodb.update_items(id, items, i, category=tl_category['text'])
 
 @dp.callback_query_handler(text='next_button')
 @dp.callback_query_handler(text='previous_button')
@@ -113,9 +112,7 @@ async def next_button(call: types.CallbackQuery):
         i += 1
     else:
         i -= 1
-    if i > len(items):
-        i = 0
-    if i < len(items):
+    if i < len(items) <= i:
         i = 0
     await call.message.delete()
     await call.message.answer_photo(photo=items[i]['img'],
@@ -135,6 +132,7 @@ if __name__ == '__main__':
         host=config.WEBAPP_HOST,
         port=config.WEBAPP_PORT
     )
+
 
 
 
