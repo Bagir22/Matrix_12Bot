@@ -44,11 +44,11 @@ def third_categories_keyboard(tl_categories):
 
 def item_keyboard(items):
     keyboard = types.InlineKeyboardMarkup()
-    if len(items) > 0:
+    if len(items) > 1:
         keyboard_previous = types.InlineKeyboardButton(text="<<", callback_data="previous_button")
         keyboard_next = types.InlineKeyboardButton(text=">>", callback_data="next_button")
+        keyboard.add(keyboard_previous, keyboard_next)
     keyboard_back = types.InlineKeyboardButton(text="Назад", callback_data="back_button")
-    keyboard.add(keyboard_previous, keyboard_next)
     keyboard.row(keyboard_back)
 
     return keyboard
