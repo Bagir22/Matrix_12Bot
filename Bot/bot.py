@@ -59,9 +59,8 @@ async def catalog_command(call: types.CallbackQuery):
 async def set_fl_catalog_keyboard(call: types.CallbackQuery):
     id = call.message.chat.id
     fl_categories = bs4_parse.get_first_level_categories()
-    mongodb.update_keyboard_index(id, kb_index=1)
     await call.message.edit_reply_markup(reply_markup=keyboards.first_categories_keyboard(fl_categories))
-
+    mongodb.update_keyboard_index(id, kb_index=1)
 
 @dp.callback_query_handler(text_contains='_fc_btn')
 async def set_sl_catalog_keyboard(call: types.CallbackQuery):
@@ -70,7 +69,6 @@ async def set_sl_catalog_keyboard(call: types.CallbackQuery):
     fl_categories = bs4_parse.get_first_level_categories()
     fl_category = fl_categories[int(fl_category_index[0])]
     sl_categories = bs4_parse.get_second_level_categories(fl_category)
-    mongodb.insert_fl_categories(id, fl_categories, fl_category, sl_categories)
     if not sl_categories:
         await call.message.edit_text(text="Идет поиск товаров")
         items = bs4_parse.get_items(category=fl_category)
@@ -90,7 +88,7 @@ async def set_sl_catalog_keyboard(call: types.CallbackQuery):
     else:
         mongodb.update_keyboard_index(id, kb_index=2)
         await call.message.edit_reply_markup(reply_markup=keyboards.first_categories_keyboard(fl_categories))
-
+    mongodb.insert_fl_categories(id, fl_categories, fl_category, sl_categories)
 
 @dp.callback_query_handler(text_contains='_sc_btn')
 async def set_tl_catalog_keyboard(call: types.CallbackQuery):
@@ -99,7 +97,6 @@ async def set_tl_catalog_keyboard(call: types.CallbackQuery):
     sl_category_index = re.findall(r'[0-9]+', call.data)
     sl_category = sl_categories[int(sl_category_index[0])]
     tl_categories = bs4_parse.get_third_level_categories(sl_category)
-    mongodb.insert_tl_categories(id, sl_category, tl_categories)
     if not tl_categories:
         await call.message.edit_text(text="Идет поиск товаров")
         items = bs4_parse.get_items(category=sl_category)
@@ -118,7 +115,7 @@ async def set_tl_catalog_keyboard(call: types.CallbackQuery):
     else:
         mongodb.update_keyboard_index(id, kb_index=3)
         await call.message.edit_reply_markup(reply_markup=keyboards.second_categories_keyboard(tl_categories))
-
+    mongodb.insert_tl_categories(id, sl_category, tl_categories)
 
 @dp.callback_query_handler(text_contains='_tc_btn')
 async def items_button(call: types.CallbackQuery):
