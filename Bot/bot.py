@@ -24,7 +24,8 @@ async def on_startup(dp):
 @dp.message_handler(commands=['stop'])
 async def stop_command(message: types.Message):
     await message.answer(text='Бот остановлен')
-    await dp.stop_polling()
+    dp.stop_polling()
+    await dp.bot.session.close()
 
 
 @dp.message_handler(commands=['start'])
