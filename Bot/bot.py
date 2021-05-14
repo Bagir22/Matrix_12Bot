@@ -21,6 +21,12 @@ async def on_startup(dp):
     await bot.set_webhook(config.WEBHOOK_URL, drop_pending_updates=True)
 
 
+@dp.message_handler(commands=['stop'])
+async def stop_command(message: types.Message):
+    await message.answer(text='Бот остановлен')
+    await dp.stop_polling()
+
+
 @dp.message_handler(commands=['start'])
 @dp.message_handler(commands=['catalog'])
 async def catalog_command(message: types.Message):
@@ -68,17 +74,22 @@ async def set_sl_catalog_keyboard(call: types.CallbackQuery):
     if not sl_categories:
         await call.message.edit_text(text="Идет поиск товаров")
         items = bs4_parse.get_items(category=fl_category)
-        await call.message.delete()
-        i = 0
-        mongodb.update_items(id, items, i, category=fl_category['text'])
-        await call.message.answer_photo(photo=items[i]['img'],
-                                        caption=f"Категория: {fl_category['text']}\n"
+        if not items:
+            await call.message.edit_text(text="Товаров в данной категории не найдено",
+                                         reply_markup=keyboards.first_categories_keyboard(fl_categories))
+        else:
+            await call.message.delete()
+            i = 0
+
+            await call.message.answer_photo(photo=items[i]['img'],
+                                            caption=f"Категория: {fl_category['text']}\n"
                                                 f"{items[i]['name']}\n "
                                                 f"Цена: {items[i]['price']}",
-                                        reply_markup=keyboards.item_keyboard(items))
+                                            reply_markup=keyboards.item_keyboard(items))
+            mongodb.update_items(id, items, i, category=fl_category['text'])
     else:
         mongodb.update_keyboard_index(id, kb_index=2)
-        await call.message.edit_reply_markup(reply_markup=keyboards.second_categories_keyboard(sl_categories))
+        await call.message.edit_reply_markup(reply_markup=keyboards.first_categories_keyboard(fl_categories))
 
 
 @dp.callback_query_handler(text_contains='_sc_btn')
@@ -92,17 +103,21 @@ async def set_tl_catalog_keyboard(call: types.CallbackQuery):
     if not tl_categories:
         await call.message.edit_text(text="Идет поиск товаров")
         items = bs4_parse.get_items(category=sl_category)
-        await call.message.delete()
-        i = 0
-        mongodb.update_items(id, items, i, category=sl_category['text'])
-        await call.message.answer_photo(photo=items[i]['img'],
-                                        caption=f"Категория: {sl_category['text']}\n"
+        if not items:
+            await call.message.edit_text(text="Товаров в данной категории не найдено",
+                                         reply_markup=keyboards.second_categories_keyboard(sl_categories))
+        else:
+            await call.message.delete()
+            i = 0
+            await call.message.answer_photo(photo=items[i]['img'],
+                                            caption=f"Категория: {sl_category['text']}\n"
                                                 f"{items[i]['name']}\n "
                                                 f"Цена: {items[i]['price']}",
-                                        reply_markup=keyboards.item_keyboard(items))
+                                            reply_markup=keyboards.item_keyboard(items))
+            mongodb.update_items(id, items, i, category=sl_category['text'])
     else:
         mongodb.update_keyboard_index(id, kb_index=3)
-        await call.message.edit_reply_markup(reply_markup=keyboards.third_categories_keyboard(tl_categories))
+        await call.message.edit_reply_markup(reply_markup=keyboards.second_categories_keyboard(tl_categories))
 
 
 @dp.callback_query_handler(text_contains='_tc_btn')
@@ -113,25 +128,28 @@ async def items_button(call: types.CallbackQuery):
     tl_category = tl_categories[int(tl_category_index[0])]
     await call.message.edit_text(text="Идет поиск товаров")
     items = bs4_parse.get_items(category=tl_category)
-    await call.message.delete()
-    i = 0
-    await call.message.answer_photo(photo=items[i]['img'],
-                                    caption=f"Категория: {tl_category['text']}\n"
-                                            f"{items[i]['name']}\n "
-                                            f"Цена: {items[i]['price']}",
-                                    reply_markup=keyboards.item_keyboard(items))
-    mongodb.update_items(id, items, i, category=tl_category['text'])
+    if not items:
+        await call.message.edit_text(text="Товаров в данной категории не найдено", reply_markup=keyboards.third_categories_keyboard(tl_categories))
+    else:
+        await call.message.delete()
+        i = 0
+        await call.message.answer_photo(photo=items[i]['img'],
+                                        caption=f"Категория: {tl_category['text']}\n"
+                                                f"{items[i]['name']}\n "
+                                                f"Цена: {items[i]['price']}",
+                                        reply_markup=keyboards.item_keyboard(items))
+        mongodb.update_items(id, items, i, category=tl_category['text'])
 
 @dp.callback_query_handler(text='next_button')
 @dp.callback_query_handler(text='previous_button')
-async def next_button(call: types.CallbackQuery):
+async def items_list_button(call: types.CallbackQuery):
     id = call.message.chat.id
     items, i, category = mongodb.get_items(id)
     if call.data == 'next_button':
         i += 1
     else:
         i -= 1
-    if i < len(items) <= i:
+    if len(items) == abs(i):
         i = 0
     await call.message.delete()
     await call.message.answer_photo(photo=items[i]['img'],
@@ -151,6 +169,7 @@ if __name__ == '__main__':
         host=config.WEBAPP_HOST,
         port=config.WEBAPP_PORT
     )
+
 
 
 
