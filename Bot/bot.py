@@ -62,6 +62,7 @@ async def set_fl_catalog_keyboard(call: types.CallbackQuery):
     await call.message.edit_reply_markup(reply_markup=keyboards.first_categories_keyboard(fl_categories))
     mongodb.update_keyboard_index(id, kb_index=1)
 
+
 @dp.callback_query_handler(text_contains='_fc_btn')
 async def set_sl_catalog_keyboard(call: types.CallbackQuery):
     id = call.message.chat.id
@@ -87,7 +88,7 @@ async def set_sl_catalog_keyboard(call: types.CallbackQuery):
             mongodb.update_items(id, items, i, category=fl_category['text'])
     else:
         mongodb.update_keyboard_index(id, kb_index=2)
-        await call.message.edit_reply_markup(reply_markup=keyboards.first_categories_keyboard(fl_categories))
+        await call.message.edit_reply_markup(reply_markup=keyboards.second_categories_keyboard(sl_categories))
     mongodb.insert_fl_categories(id, fl_categories, fl_category, sl_categories)
 
 @dp.callback_query_handler(text_contains='_sc_btn')
@@ -114,7 +115,7 @@ async def set_tl_catalog_keyboard(call: types.CallbackQuery):
             mongodb.update_items(id, items, i, category=sl_category['text'])
     else:
         mongodb.update_keyboard_index(id, kb_index=3)
-        await call.message.edit_reply_markup(reply_markup=keyboards.second_categories_keyboard(tl_categories))
+        await call.message.edit_reply_markup(reply_markup=keyboards.third_categories_keyboard(tl_categories))
     mongodb.insert_tl_categories(id, sl_category, tl_categories)
 
 @dp.callback_query_handler(text_contains='_tc_btn')
