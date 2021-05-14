@@ -28,60 +28,60 @@ def insert_data_into_db(id, fl_category=None, sl_category=None,
 
 def insert_fl_categories(id, fl_categories, fl_category, sl_categories):
     collection.update_one(
-        {"_id": id}, {"$set": {"fl_categories": fl_categories,
+        {"id": id}, {"$set": {"fl_categories": fl_categories,
                                "fl_category": fl_category,
                                "sl_categories": sl_categories}})
 
 
 def insert_tl_categories(id, sl_category, tl_categories):
     collection.update_one(
-        {"_id": id}, {"$set": {"sl_category": sl_category,
+        {"id": id}, {"$set": {"sl_category": sl_category,
                                "tl_categories": tl_categories}})
 
 
 def get_sls_fl(id):
-    sls = collection.find_one({"_id": id})["sl_categories"]
-    fl = collection.find_one({"_id": id})["fl_category"]
+    sls = collection.find_one({"id": id})["sl_categories"]
+    fl = collection.find_one({"id": id})["fl_category"]
 
     return sls, fl
 
 
 def get_tls(id):
-    tls = collection.find_one({"_id": id})["tl_categories"]
+    tls = collection.find_one({"id": id})["tl_categories"]
 
     return tls
 
 
 def update_items(id, items=None, i=None, category = None):
     collection.update_one(
-        {"_id": id}, {"$set": {"items": items,
+        {"id": id}, {"$set": {"items": items,
                                "i": i,
                                "category": category}})
 
 
 def update_i(id, i):
     collection.update_one(
-        {"_id": id}, {"$set": {"i": i}})
+        {"id": id}, {"$set": {"i": i}})
 
 
 def update_keyboard_index(id, kb_index):
     collection.update_one(
-        {"_id": id}, {"$set": {"kb_index": kb_index}})
+        {"id": id}, {"$set": {"kb_index": kb_index}})
 
 
 
 def get_items(id):
-    items = collection.find_one({"_id": id})["items"]
-    i = collection.find_one({"_id": id})["i"]
-    category = collection.find_one({"_id": id})["category"]
+    items = collection.find_one({"id": id})["items"]
+    i = collection.find_one({"id": id})["i"]
+    category = collection.find_one({"id": id})["category"]
 
     return items, i, category
 
 
 def get_categories(id):
-    fl_categories = collection.find_one({"_id": id})["fl_categories"]
-    sl_categories = collection.find_one({"_id": id})["sl_categories"]
-    tl_categories = collection.find_one({"_id": id})["tl_categories"]
-    kb_index = collection.find_one({"_id": id})["kb_index"]
+    fl_categories = collection.find_one({"id": id})["fl_categories"]
+    sl_categories = collection.find_one({"id": id})["sl_categories"]
+    tl_categories = collection.find_one({"id": id})["tl_categories"]
+    kb_index = collection.find_one({"id": id})["kb_index"]
 
     return fl_categories, sl_categories, tl_categories, kb_index
