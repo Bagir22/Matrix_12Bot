@@ -36,7 +36,7 @@ async def catalog_command(message: types.Message):
 
 
 @dp.callback_query_handler(text='back_button')
-async def catalog_command(call: types.CallbackQuery):
+async def back_btn_command(call: types.CallbackQuery):
     await call.message.delete()
     id = call.message.chat.id
     fl_categories, sl_categories, tl_categories, kb_index = mongodb.get_categories(id)
