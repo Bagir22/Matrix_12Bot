@@ -46,6 +46,8 @@ async def catalog_command(call: types.CallbackQuery):
     if kb_index == 1:
         await call.message.answer(text='Каталог:',
                                   reply_markup=keyboards.first_categories_keyboard(fl_categories))
+        kb_index -= 1
+        mongodb.update_keyboard_index(id, kb_index)
     if kb_index == 2:
         await call.message.answer(text='Каталог:',
                                   reply_markup=keyboards.second_categories_keyboard(sl_categories))
