@@ -40,6 +40,9 @@ async def catalog_command(call: types.CallbackQuery):
     await call.message.delete()
     id = call.message.chat.id
     fl_categories, sl_categories, tl_categories, kb_index = mongodb.get_categories(id)
+    if kb_index == 0:
+        await call.message.answer(text='Каталог:',
+                                  reply_markup=keyboards.main_keyboard())
     if kb_index == 1:
         await call.message.answer(text='Каталог:',
                                   reply_markup=keyboards.first_categories_keyboard(fl_categories))
